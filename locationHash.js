@@ -1,5 +1,5 @@
 /*
-	locationHash.js - 1.0
+	locationHash.js - 1.1
 	https://github.com/Mr21/locationHash.js
 */
 
@@ -20,7 +20,9 @@
 					a.locationHash_eventSetted = true;
 					attachEvent(a, "click", function(e) {
 						var href = this.getAttribute("href");
-						if (href[0] === "#" && href[1] === "#" && locationHash.change(href.substr(2))) {
+						if (href[0] === "#" && href[1] === "#" &&
+							locationHash.change(href.substr(2))
+						) {
 							locationHash.push();
 							e.preventDefault();
 						}
@@ -85,7 +87,7 @@
 		},
 		change: function(s) {
 			var	parts, partsPrev,
-				reg = /\s*(add|sub|toggle)\s*\(\s*([\w-]+)\s*(,\s*([\w-]+)\s*)?\)\s*,?/g;
+				reg = /\s*(add|sub|toggle)\s*\(\s*([\w+-]+)\s*(,\s*([\w+-]+)\s*)?\)\s*,?/g;
 			while (parts = reg.exec(s)) {
 				partsPrev = parts;
 				this[parts[1]](parts[2], parts[4]);
@@ -100,7 +102,7 @@
 			var hash = location.hash;
 			this.data = {};
 			if (hash) {
-				hash = hash.substr(1).split("&");
+				hash = hash.substr(2).split("&");
 				for (var i in hash) {
 					var keyValue = hash[i].split("=");
 					this.data[keyValue[0]] = keyValue[1] || true;
@@ -110,7 +112,7 @@
 			return this;
 		},
 		push: function() {
-			var hash = "#";
+			var hash = "/";
 			for (var i in this.data) {
 				if (hash.length > 1)
 					hash += "&";
