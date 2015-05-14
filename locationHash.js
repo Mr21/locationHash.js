@@ -1,5 +1,5 @@
 /*
-	locationHash.js - 1.1
+	locationHash.js - 1.2
 	https://github.com/Mr21/locationHash.js
 */
 
@@ -133,7 +133,7 @@
 		locationHash.pull();
 	});
 	attachEvent(window, "DOMNodeInserted", function(e) {
-		setEvent(e.srcElement);
+		setEvent(e.target);
 	});
 	attachEvent(window, "load", function() {
 		setEvent(document.body);
