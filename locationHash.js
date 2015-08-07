@@ -1,5 +1,5 @@
 /*
-	locationHash.js - 1.2
+	locationHash.js - 1.0.0
 	https://github.com/Mr21/locationHash.js
 */
 
