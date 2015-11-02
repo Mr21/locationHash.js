@@ -7,6 +7,7 @@
 
 	// private
 	var
+		that,
 		callbacks = {},
 		oldData = {}
 	;
@@ -66,37 +67,37 @@
 	}
 
 	// public
-	window.locationHash = {
+	window.locationHash = that = {
 		clear: function() {
-			this.data = {};
-			return this;
+			that.data = {};
+			return that;
 		},
 		add: function( key, val ) {
-			this.data[ key ] = val || true;
-			return this;
+			that.data[ key ] = val || true;
+			return that;
 		},
 		sub: function( key ) {
-			delete this.data[ key ];
-			return this;
+			delete that.data[ key ];
+			return that;
 		},
 		toggle: function( key, val ) {
 			val = val || true;
-			return this.data[ key ] === val
-				? this.sub( key )
-				: this.add( key, val )
+			return that.data[ key ] === val
+				? that.sub( key )
+				: that.add( key, val )
 			;
 		},
 		watch: function( o ) {
 			for ( var i in o ) {
-				( callbacks[ i ] = o[ i ] )( this.data[ i ] );
+				( callbacks[ i ] = o[ i ] )( that.data[ i ] );
 			}
-			return this;
+			return that;
 		},
 		unwatch: function() {
 			for ( var i = 0; i < arguments.length; ++i ) {
 				delete callbacks[ arguments[ i ] ];
 			}
-			return this;
+			return that;
 		},
 		change: function( s ) {
 			var
@@ -106,43 +107,43 @@
 			;
 			while ( parts = reg.exec( s ) ) {
 				partsPrev = parts;
-				this[ parts[ 1 ] ]( parts[ 2 ], parts[ 4 ] );
+				that[ parts[ 1 ] ]( parts[ 2 ], parts[ 4 ] );
 			}
 			if ( partsPrev.index + partsPrev[ 0 ].length !== s.length ) {
 				console.error( 'locationHash.js: parse-error: "' + s + '"' );
 				return false;
 			}
-			return this;
+			return that;
 		},
 		pull: function() {
 			var hash = location.hash;
-			this.data = {};
+			that.data = {};
 			if ( hash ) {
 				hash = hash.substr( 2 ).split( "&" );
 				for ( var i in hash ) {
 					var keyValue = hash[ i ].split( "=" );
-					this.data[ keyValue[ 0 ] ] = keyValue[ 1 ] || true;
+					that.data[ keyValue[ 0 ] ] = keyValue[ 1 ] || true;
 				}
 			}
 			execCallbacks();
-			return this;
+			return that;
 		},
 		push: function() {
 			var hash = "/";
-			for ( var i in this.data ) {
+			for ( var i in that.data ) {
 				if ( hash.length > 1 ) {
 					hash += "&";
 				}
 				hash += i;
-				if ( this.data[ i ] !== true ) {
-					hash += "=" + this.data[ i ];
+				if ( that.data[ i ] !== true ) {
+					hash += "=" + that.data[ i ];
 				}
 			}
 			if ( location.hash !== hash ) {
 				location.hash = hash;
 			}
 			execCallbacks();
-			return this;
+			return that;
 		}
 	};
 
