@@ -1,0 +1,85 @@
+<script src="../locationHash.js"></script>
+<script>
+
+function test( exp ) {
+	var lh = location.hash;
+	if ( lh !== exp ) {
+		console.error( "received: \"" + lh + "\"   expected: \"" + exp + "\"" );
+	}
+}
+
+function clear() {
+	locationHash.clear().push();
+	test( "#/" );
+}
+
+// .add()
+
+clear();
+
+locationHash.add( "a", "va" ).push();
+test( "#/a=va" );
+
+locationHash.add( "a", "va" ).push();
+test( "#/a=va" );
+
+locationHash.add( "a", "va_" ).push();
+test( "#/a=va_" );
+
+locationHash.add( "a" ).push();
+test( "#/a" );
+
+locationHash.add( "b", "vb" ).push();
+test( "#/a&b=vb" );
+
+locationHash.add( "b", "vb" ).add( "c", "vc" ).add( "d" ).push();
+test( "#/a&b=vb&c=vc&d" );
+
+locationHash.add( "b", "vb" ).add( "c", "vc" ).add( "d" ).push();
+test( "#/a&b=vb&c=vc&d" );
+
+locationHash.add( "b", "vb_" ).add( "c", "vc_" ).add( "d", "vd_" ).push();
+test( "#/a&b=vb_&c=vc_&d=vd_" );
+
+locationHash.add( "b" ).add( "c" ).add( "d" ).push();
+test( "#/a&b&c&d" );
+
+// .add() + .sub()
+
+clear();
+
+locationHash.add( "a", "va" ).add( "b", "vb" ).add( "c", "vc" ).add( "d", "vd" ).add( "e", "ve" ).push();
+test( "#/a=va&b=vb&c=vc&d=vd&e=ve" );
+
+locationHash.sub( "a" ).sub( "c" ).sub( "e" ).push();
+test( "#/b=vb&d=vd" );
+
+locationHash.sub( "b" ).sub( "d" ).push();
+test( "#/" );
+
+locationHash.add( "a", "va" ).add( "b", "vb" ).add( "c", "vc" ).add( "d", "vd" ).add( "e", "ve" ).push();
+test( "#/a=va&b=vb&c=vc&d=vd&e=ve" );
+
+locationHash.sub( "a" ).sub( "b" ).sub( "c" ).sub( "d" ).sub( "e" ).push();
+test( "#/" );
+
+// .toggle()
+
+clear();
+
+locationHash.toggle( "a", "va" ).push();
+test( "#/a=va" );
+
+locationHash.toggle( "a", "va" ).push();
+test( "#/" );
+
+locationHash.toggle( "a", "va" ).push();
+test( "#/a=va" );
+
+locationHash.toggle( "a", "va" ).toggle( "b", "vb" ).push();
+test( "#/b=vb" );
+
+locationHash.toggle( "a", "va" ).toggle( "b", "vb" ).toggle( "c", "vc" ).push();
+test( "#/a=va&c=vc" );
+
+</script>
